@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace ContractInterface.ERC20
+namespace CP.FinTech.SVO.ERC20
 {
     public static class Constants
     {
@@ -41,7 +41,7 @@ namespace ContractInterface.ERC20
         public static string CONTRACT_ARTIFACTS_DIR_NAME = "Contracts";
         public static string CONTRACT_ARTIFACT_FILE_NAME = "ContractArtifacts";
         #endregion
-    
+
         #region Cache
 
         public static string CACHE_CONTRACT_LIST = "ContractList";

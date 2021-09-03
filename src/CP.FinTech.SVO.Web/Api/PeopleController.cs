@@ -1,4 +1,4 @@
-using ContractInterface.ERC20;
+using CP.FinTech.SVO.ERC20;
 using CP.FinTech.SVO.Infrastructure.Ethereum.Facade;
 using CP.FinTech.SVO.Infrastructure.Ethereum.Helpers.OperationResults;
 using CP.FinTech.SVO.Infrastructure.Ethereum.Interfaces;

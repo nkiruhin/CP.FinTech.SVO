@@ -2,21 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Ardalis.ListStartupServices;
 using Autofac;
 using CP.FinTech.SVO.Core;
+using CP.FinTech.SVO.ERC20;
 using CP.FinTech.SVO.Infrastructure;
+using CP.FinTech.SVO.Infrastructure.Ethereum.Facade;
+using CP.FinTech.SVO.Infrastructure.Ethereum.Interfaces;
+using CP.FinTech.SVO.Infrastructure.Ethereum.Services;
 using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
 namespace CP.FinTech.SVO.Web
 {
-	public class Startup
+    public class Startup
 	{
 		private readonly IWebHostEnvironment _env;
 
@@ -36,9 +44,33 @@ namespace CP.FinTech.SVO.Web
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			string connectionString = Configuration.GetConnectionString("SqliteConnection");  //Configuration.GetConnectionString("DefaultConnection");
+			var connectionString = Configuration.GetConnectionString("SqliteConnection");  //Configuration.GetConnectionString("DefaultConnection");
 
-			services.AddDbContext(connectionString);
+			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			
+			services.AddERC20();
+			
+			services.AddInfrastructure(connectionString);
+
+			services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+			//Config authentication
+			var key = Encoding.UTF8.GetBytes(Configuration.GetSection("Auth").GetSection("Secret").Value);
+			services.AddAuthentication(x => {
+				x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+			}).AddJwtBearer(x => {
+				x.RequireHttpsMetadata = false;
+				x.SaveToken = true;
+				x.TokenValidationParameters = new TokenValidationParameters()
+				{
+					ValidateIssuerSigningKey = true,
+					IssuerSigningKey = new SymmetricSecurityKey(key),
+					ValidateIssuer = false,
+					ValidateAudience = false
+				};
+			});
+
 			
 			services.AddMediatR(GetAppAssembly());
 			
@@ -81,7 +113,8 @@ namespace CP.FinTech.SVO.Web
 				app.UseHsts();
 			}
 			app.UseRouting();
-
+			app.UseAuthentication();
+			app.UseAuthorization();
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();

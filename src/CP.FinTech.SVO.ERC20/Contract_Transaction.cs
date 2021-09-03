@@ -5,7 +5,7 @@ using Nethereum.Web3;
 using System.Numerics;
 using System.Threading.Tasks;
 
-namespace ContractInterface.ERC20
+namespace CP.FinTech.SVO.ERC20
 {
     public partial class ContractOperation : IContractOperation
     {

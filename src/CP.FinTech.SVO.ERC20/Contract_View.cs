@@ -1,16 +1,10 @@
+using Nethereum.Contracts;
 using System.Numerics;
 using System.Threading.Tasks;
 
-using Nethereum.Web3;
-using Nethereum.Contracts;
-using Nethereum.Web3.Accounts.Managed;
-using Nethereum.RPC.Eth.DTOs;
-using Nethereum.Hex.HexTypes;
-using Nethereum.Hex.HexConvertors;
-
-namespace ContractInterface.ERC20
+namespace CP.FinTech.SVO.ERC20
 {
-    public partial class ContractOperation: IContractOperation
+    public partial class ContractOperation : IContractOperation
     {
 
         public async Task<BigInteger> GetTotalSupply(Contract contract)

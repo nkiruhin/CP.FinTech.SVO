@@ -1,6 +1,6 @@
 using CP.FinTech.SVO.Infrastructure.Ethereum.Facade;
 
-namespace ContractInterface.ERC20
+namespace CP.FinTech.SVO.ERC20
 {
     public partial class ContractOperation : IContractOperation
     {

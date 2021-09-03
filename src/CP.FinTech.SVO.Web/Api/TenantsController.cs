@@ -13,11 +13,11 @@ namespace CP.FinTech.SVO.Web.Api
     /// A sample API Controller. Consider using API Endpoints (see Endpoints folder) for a more SOLID approach to building APIs
     /// https://github.com/ardalis/ApiEndpoints
     /// </summary>
-    public class ProjectsController : BaseApiController
+    public class TenantsController : BaseApiController
     {
         private readonly IRepository<Project> _repository;
 
-        public ProjectsController(IRepository<Project> repository)
+        public TenantsController(IRepository<Project> repository)
         {
             _repository = repository;
         }
@@ -27,7 +27,7 @@ namespace CP.FinTech.SVO.Web.Api
         public async Task<IActionResult> List()
         {
             var projectDTOs = (await _repository.ListAsync())
-                .Select(project => new ProjectDTO
+                .Select(project => new TenantsDto
                 {
                     Id = project.Id,
                     Name = project.Name
@@ -44,14 +44,11 @@ namespace CP.FinTech.SVO.Web.Api
             var projectSpec = new ProjectByIdWithItemsSpec(id);
             var project = await _repository.GetBySpecAsync(projectSpec);
 
-            var result = new ProjectDTO
+            var result = new TenantsDto
             {
                 Id = project.Id,
                 Name = project.Name,
-                Items = new List<ToDoItemDTO>
-                (
-                    project.Items.Select(i => ToDoItemDTO.FromToDoItem(i)).ToList()
-                )
+               
             };
 
             return Ok(result);
@@ -59,13 +56,13 @@ namespace CP.FinTech.SVO.Web.Api
 
         // POST: api/Projects
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] CreateProjectDTO request)
+        public async Task<IActionResult> Post([FromBody] TenantsDto request)
         {
             var newProject = new Project(request.Name);
 
             var createdProject = await _repository.AddAsync(newProject);
 
-            var result = new ProjectDTO
+            var result = new TenantsDto
             {
                 Id = createdProject.Id,
                 Name = createdProject.Name

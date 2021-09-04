@@ -1,5 +1,6 @@
 ﻿using CP.FinTech.SVO.Core.ProjectAggregate;
 using CP.FinTech.SVO.Infrastructure.Data;
+using CP.FinTech.SVO.Web.ApiModels;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,13 +29,13 @@ namespace CP.FinTech.SVO.IntegrationTests.Data
             return builder.Options;
         }
 
-        protected EfRepository<Project> GetRepository()
+        protected EfRepository<Tenant> GetRepository()
         {
             var options = CreateNewContextOptions();
             var mockMediator = new Mock<IMediator>();
 
             _dbContext = new AppDbContext(options, mockMediator.Object);
-            return new EfRepository<Project>(_dbContext);
+            return new EfRepository<Tenant>(_dbContext);
         }
     }
 }

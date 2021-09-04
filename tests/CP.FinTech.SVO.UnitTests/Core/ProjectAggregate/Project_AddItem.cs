@@ -1,4 +1,5 @@
 ﻿using CP.FinTech.SVO.Core.ProjectAggregate;
+using CP.FinTech.SVO.Web.ApiModels;
 using System;
 using Xunit;
 
@@ -6,7 +7,7 @@ namespace CP.FinTech.SVO.UnitTests.Core.ProjectAggregate
 {
     public class Project_AddItem
     {
-        private Project _testProject = new Project("some name");
+        private Tenant _testProject = new Project("some name");
 
         [Fact]
         public void AddsItemToItems()

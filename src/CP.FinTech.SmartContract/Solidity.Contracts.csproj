@@ -1,12 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include = "Nethereum.Web3" Version="4.0.0" />
+        <PackageReference Include="Nethereum.Autogen.ContractApi" Version="3.6.2" />
+        <PackageReference Include="Nethereum.Web3" Version="4.0.5" />
     </ItemGroup>
     
 </Project>

@@ -18,4 +18,10 @@
     <ProjectReference Include="..\CP.FinTech.SVO.SharedKernel\CP.FinTech.SVO.SharedKernel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ProjectAggregate\Events\" />
+    <Folder Include="ProjectAggregate\Handlers\" />
+    <Folder Include="Services\" />
+  </ItemGroup>
+
 </Project>

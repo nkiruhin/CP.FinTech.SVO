@@ -1,4 +1,5 @@
 ﻿using CP.FinTech.SVO.Core.ProjectAggregate;
+using CP.FinTech.SVO.Web.ApiModels;
 using Xunit;
 
 namespace CP.FinTech.SVO.UnitTests.Core.ProjectAggregate
@@ -6,9 +7,9 @@ namespace CP.FinTech.SVO.UnitTests.Core.ProjectAggregate
     public class ProjectConstructor
     {
         private string _testName = "test name";
-        private Project _testProject = null;
+        private Tenant _testProject = null;
 
-        private Project CreateProject()
+        private Tenant CreateProject()
         {
             return new Project(_testName);
         }

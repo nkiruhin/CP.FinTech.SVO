@@ -4,9 +4,9 @@ using System;
 using System.Runtime.ConstrainedExecution;
 using System.Collections.Generic;
 
-namespace CP.FinTech.SVO.Web.ApiModels
+namespace CP.FinTech.SVO.Core.ProjectAggregate
 {
-    public class ContractDto: BaseEntity
+    public class Contract : BaseEntity, IAggregateRoot
     {
 
         /// <summary>
@@ -17,7 +17,10 @@ namespace CP.FinTech.SVO.Web.ApiModels
         /// Дата окончания
         /// </summary>
         public DateTime DateEnd { get; set; }
-        
+        /// <summary>
+        /// Сигнатура контракта(арендатора)
+        /// </summary>
+        public byte[] Signature { get; set; }
         /// <summary>
         /// Идентификатор обьекта аренды
         /// </summary>
@@ -34,7 +37,10 @@ namespace CP.FinTech.SVO.Web.ApiModels
         /// Номер счетa
         /// </summary>
         public string WalletAddress { get; set; }
-
+        /// <summary>
+        /// Арендодатель
+        /// </summary>
+        public Tenant Tenant { get; set; }
         /// <summary>
         /// Арендодатель
         /// </summary>
@@ -42,6 +48,6 @@ namespace CP.FinTech.SVO.Web.ApiModels
         /// <summary>
         /// Ссылка на транзакции
         /// </summary>
-        public IList<TransactionDto> Transactions { get; set; }
+        public IList<Transaction> Transactions { get; set; }
     }
 }

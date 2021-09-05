@@ -119,8 +119,10 @@ npm start
 
 
 Документация swagger open api будет доступна по адресу http://localhost:5000/swagger/index.html
+  
+Необходимо запустить сервис solidity.exe для взаимодействия с блокчейном
 
-
+Для тестовой работы необходим Ganache
 
 <!-- CONTRIBUTING -->
 ## Contributing

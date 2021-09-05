@@ -17,8 +17,10 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -73,7 +75,9 @@ namespace CP.FinTech.SVO.Web
 
 			
 			services.AddMediatR(GetAppAssembly());
-			
+			services.AddSpaStaticFiles(configuration => {
+				configuration.RootPath = "client-app/build";
+			});
 			services.AddControllers().AddNewtonsoftJson();
 
 			services.AddSwaggerGen(c => {
@@ -118,7 +122,7 @@ namespace CP.FinTech.SVO.Web
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-
+			app.UseSpaStaticFiles();
 			// Enable middleware to serve generated Swagger as a JSON endpoint.
 			app.UseSwagger();
 
@@ -128,6 +132,14 @@ namespace CP.FinTech.SVO.Web
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapDefaultControllerRoute();
+			});
+			app.UseSpa(spa => {
+				spa.Options.SourcePath = "client-app";
+				if (env.IsDevelopment())
+				{
+					spa.UseReactDevelopmentServer(npmScript: "start");
+					//spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+				}
 			});
 		}
 	}

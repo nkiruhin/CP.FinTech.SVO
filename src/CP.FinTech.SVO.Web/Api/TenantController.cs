@@ -28,8 +28,7 @@ namespace CP.FinTech.SVO.Web.Api
         [HttpGet]
         public async Task<IActionResult> List()
         {
-            var tenantDtos = (await _repository.ListAsync<Tenant>())
-                
+            var tenantDtos = (await _repository.ListAsync<Tenant>(new TenantWithContractSpec()))
                 .Select(tenantDto => new TenantDto
                 {
                     Id = tenantDto.Id,
@@ -42,9 +41,19 @@ namespace CP.FinTech.SVO.Web.Api
                     Kpp = tenantDto.Kpp,
                     Contacts = tenantDto.Contacts,
                     Ogrn = tenantDto.Ogrn,
-                    orgType = tenantDto.orgType                   
-                })
-                .ToList();
+                    orgType = tenantDto.orgType,
+                    Contracts = tenantDto.Contracts.Select(x => new ContractDto
+                    {
+                        Id = x.Id,
+                        RentalObjectId = x.RentalObjectId,
+                        RatePerSquareMeter = x.RatePerSquareMeter,
+                        Conssesion = x.Conssesion,
+                        DateEnd = x.DateEnd,
+                        DateStart = x.DateStart,
+                        TenantId = x.TenantId,
+                        WalletAddress = x.WalletAddress
+                    }).ToList()
+                });                
 
             return Ok(tenantDtos);
         }
@@ -58,6 +67,7 @@ namespace CP.FinTech.SVO.Web.Api
 
             var contractDto = tenantDto.Contracts.Select(x => new ContractDto
             {
+                Id = x.Id,
                 RentalObjectId = x.RentalObjectId,
                 RatePerSquareMeter = x.RatePerSquareMeter,
                 Conssesion = x.Conssesion,
@@ -90,7 +100,7 @@ namespace CP.FinTech.SVO.Web.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TenantDto request)
         {
-            var newProject = new Tenant() 
+            var newTenant = new Tenant() 
             {
                 Name = request.Name,
                 ShortName = request.ShortName,
@@ -102,7 +112,7 @@ namespace CP.FinTech.SVO.Web.Api
                 Ogrn = request.Ogrn,
                 orgType = request.orgType
             };
-            _ = await _repository.AddAsync(newProject);
+            _ = await _repository.AddAsync(newTenant);
             return Ok(request);
         }
         

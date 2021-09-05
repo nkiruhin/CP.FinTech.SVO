@@ -26,6 +26,7 @@ namespace CP.FinTech.SVO.Web
             Kpp = "309445806",
             Ogrn = "9113863442937",
             orgType = OrgType.Org,
+            WalletAddress = new[] { "hgjhgjhgjhgjh" },
             Contracts = new List<Contract>()
             {
                 new Contract()
@@ -74,8 +75,8 @@ namespace CP.FinTech.SVO.Web
             Inn = "256686264933",
             Kpp = "",
             Ogrn = "",
-            orgType = OrgType.Ip
-
+            orgType = OrgType.Ip,
+            WalletAddress = new[] { "hgjhgjhgjhgjh" },
         };
       
 

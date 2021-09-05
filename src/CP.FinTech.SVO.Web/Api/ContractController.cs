@@ -70,7 +70,7 @@ namespace CP.FinTech.SVO.Web.Api
         {
             try
             {
-                ContractService contServ = new ContractService(_contractFacade, _config);
+                var contServ = new ContractService(_contractFacade, _config);
                 return await contServ.DeploySVOSmartToken();
             }
             catch (Exception ex)
@@ -80,6 +80,35 @@ namespace CP.FinTech.SVO.Web.Api
             }
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult<DeploymentResult>> SaveContract([FromBody] ContractDto request)
+        {
+            var newContract = new Contract()
+            {
+                Id = request.Id,
+                DateEnd = request.DateEnd,
+                DateStart = request.DateStart,
+                Conssesion = request.Conssesion,
+                RatePerSquareMeter = request.RatePerSquareMeter,
+                RentalObjectId = request.RentalObjectId,
+                TenantId = request.TenantId,
+                WalletAddress = request.WalletAddress,
+            };
+            _ = await _repository.AddAsync(newContract);
+            return Ok(request);
+
+            try
+            {
+                var contServ = new ContractService(_contractFacade, _config);
+                return await contServ.DeploySVOSmartToken();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error deploying contract: \n" + ex.Message);
+                return StatusCode(500);
+            }
+        }
         [HttpGet("{contractAddress}/totalsupply")]
         public async Task<ActionResult<BigInteger>> GetTotalSupply(string contractAddress)
         {
@@ -110,7 +139,7 @@ namespace CP.FinTech.SVO.Web.Api
         }
         // GET: api/Projects
         [AllowAnonymous]
-        [HttpGet("{tenantId}")]
+        [HttpGet("{tenantId}/byTenant")]
         public async Task<IActionResult> List(int tenantId)
         {
             var contractsDtos = (await _repository.ListAsync<Contract>(new ContractByTenantIdSpec(tenantId)))
@@ -138,6 +167,37 @@ namespace CP.FinTech.SVO.Web.Api
                 .ToList();
 
             return Ok(contractsDtos);
+        }
+        [AllowAnonymous]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(int id)
+        {
+            var contract = await _repository.GetByIdAsync<Contract>(id);
+
+            var result = new ContractDto
+            {
+
+                Id = contract.Id,
+                DateEnd = contract.DateEnd,
+                DateStart = contract.DateStart,
+                Conssesion = contract.Conssesion,
+                RatePerSquareMeter = contract.RatePerSquareMeter,
+                RentalObjectId = contract.RentalObjectId,
+                TenantId = contract.TenantId,
+                WalletAddress = contract.WalletAddress,
+                Transactions = contract.Transactions?.Select(t => new TransactionDto
+                {
+                    Date = t.Date,
+                    Amount = (BigInteger)t.Amount,
+                    ToAddress = t.Destination,
+                    EthereumTransactionId = t.EthereumTransactionId,
+                    ContractId = t.ContractId,
+                    FromAddress = t.Source,
+                    Id = t.Id
+                }).ToList()
+            };
+
+            return Ok(result);
         }
     }
 }
